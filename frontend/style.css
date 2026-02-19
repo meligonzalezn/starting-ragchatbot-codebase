@@ -191,6 +191,43 @@ header h1 {
   margin-bottom: 0;
 }
 
+/* New Chat Button Section */
+.new-chat-section {
+    margin-bottom: 1.5rem;
+}
+
+.new-chat-button {
+    width: 100%;
+    padding: 0.5rem 0;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    outline: none;
+    text-align: left;
+}
+
+.new-chat-button::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.new-chat-button:hover {
+    color: var(--primary-color);
+}
+
+.new-chat-button:focus {
+    color: var(--primary-color);
+    outline: none;
+}
+
 /* Main Chat Area */
 .chat-main {
   flex: 1;
@@ -321,8 +358,62 @@ header h1 {
 }
 
 .sources-content {
-  padding: 0 0.5rem 0.25rem 1.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Source chip styling */
+.source-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 6px;
+  color: #60a5fa;
+  text-decoration: none;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.source-chip:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #93c5fd;
+  transform: translateY(-1px);
+}
+
+.source-chip:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.source-chip-icon {
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.source-chip:hover .source-chip-icon {
+  opacity: 1;
+}
+
+.source-chip-disabled {
+  background: rgba(100, 116, 139, 0.15);
+  border-color: rgba(100, 116, 139, 0.3);
   color: var(--text-secondary);
+  cursor: default;
+}
+
+.source-chip-disabled:hover {
+  transform: none;
+  background: rgba(100, 116, 139, 0.15);
+  border-color: rgba(100, 116, 139, 0.3);
 }
 
 /* Markdown formatting styles */

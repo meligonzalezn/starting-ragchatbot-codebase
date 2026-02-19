@@ -13,7 +13,7 @@ const API_URL = "/api";
 let currentSessionId = null;
 
 // DOM elements
-let chatMessages, chatInput, sendButton, totalCourses, courseTitles;
+let chatMessages, chatInput, sendButton, totalCourses, courseTitles, newChatButton;
 
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   sendButton = document.getElementById("sendButton");
   totalCourses = document.getElementById("totalCourses");
   courseTitles = document.getElementById("courseTitles");
+  newChatButton = document.getElementById("newChatButton");
 
   setupEventListeners();
   createNewSession();
@@ -30,14 +31,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function toggleTheme() {
-    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    if (isLight) {
-        document.documentElement.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'dark');
-    } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
-    }
+  const isLight = document.documentElement.getAttribute("data-theme") === "light";
+  if (isLight) {
+    document.documentElement.removeAttribute("data-theme");
+    localStorage.setItem("theme", "dark");
+  } else {
+    document.documentElement.setAttribute("data-theme", "light");
+    localStorage.setItem("theme", "light");
+  }
 }
 
 // Event Listeners
@@ -50,6 +51,11 @@ function setupEventListeners() {
   chatInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") sendMessage();
   });
+
+  // New chat button
+  if (newChatButton) {
+    newChatButton.addEventListener("click", handleNewChat);
+  }
 
   // Suggested questions
   document.querySelectorAll(".suggested-item").forEach((button) => {
@@ -141,10 +147,28 @@ function addMessage(content, type, sources = null, isWelcome = false) {
   let html = `<div class="message-content">${displayContent}</div>`;
 
   if (sources && sources.length > 0) {
+    // Build source items as individual chips
+    const sourceItems = sources
+      .map((source) => {
+        if (source.url) {
+          // Create clickable link chip that opens in new tab
+          return `<a href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer" class="source-chip">
+                    <span class="source-chip-text">${escapeHtml(source.text)}</span>
+                    <svg class="source-chip-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <path d="M10.5 1.5L1.5 10.5M10.5 1.5H3.5M10.5 1.5V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>`;
+        } else {
+          // No link available - show as non-clickable chip
+          return `<span class="source-chip source-chip-disabled">${escapeHtml(source.text)}</span>`;
+        }
+      })
+      .join("");
+
     html += `
             <details class="sources-collapsible">
                 <summary class="sources-header">Sources</summary>
-                <div class="sources-content">${sources.join(", ")}</div>
+                <div class="sources-content">${sourceItems}</div>
             </details>
         `;
   }
@@ -174,6 +198,21 @@ async function createNewSession() {
     null,
     true
   );
+}
+
+// Handle new chat button click
+function handleNewChat() {
+    // Check if there are existing messages (excluding welcome message)
+    const messages = chatMessages.querySelectorAll('.message:not(.welcome-message)');
+
+    // Only show confirmation if there are messages to lose
+    if (messages.length > 0) {
+        const confirmed = confirm('Start a new conversation? Your current chat history will be cleared.');
+        if (!confirmed) return;
+    }
+
+    // Create new session (clears chat, resets session ID, shows welcome)
+    createNewSession();
 }
 
 // Load course statistics
