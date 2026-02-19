@@ -1,0 +1,15 @@
+{
+  "name": "starting-ragchatbot-frontend",
+  "version": "0.1.0",
+  "description": "Frontend dev tooling for RAG chatbot",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write frontend/",
+    "format:check": "prettier --check frontend/",
+    "lint": "eslint frontend/script.js"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0",
+    "eslint": "^9.0.0"
+  }
+}
